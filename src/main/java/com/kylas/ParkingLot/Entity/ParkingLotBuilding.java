@@ -23,16 +23,26 @@ public class ParkingLotBuilding {
         return floors;
     }
 
-    public void parkVehicle(String vehicleNumberPlate, ParkingSlot slot) {
-        vehicleParkedMap.put(vehicleNumberPlate, slot);
+    public void parkVehicle(Vehicle vehicle, ParkingSlot slot) {
+        slot.setOccupied(true);
+        vehicleParkedMap.put(vehicle.getVehicleNumPlate(), slot);
     }
 
-    public ParkingSlot unparkVehicle(String vehicleNumber) {
+    public ParkingSlot unparkVehicle(String vehicleNumber,ParkingSlot slot) {
+        slot.setOccupied(false);
         return vehicleParkedMap.remove(vehicleNumber);
     }
 
     public ParkingSlot getSlotByVehicleNumber(String vehicleNumber) {
         return vehicleParkedMap.get(vehicleNumber);
+    }
+
+    public int getAvailableSlots() {
+        int available = 0;
+        for (ParkingFloor floor : floors) {
+            available += floor.getSlots().stream().filter(slot -> !slot.isOccupied()).count();
+        }
+        return available;
     }
 
 }
